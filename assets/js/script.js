@@ -62,9 +62,30 @@ var formatCityName = function(city) {
 }
 
 // displays forecast for city
-// var displayForecast = function(forecast) {
+var displayForecast = function(forecast) {
 
+    cityForecastEl.classList.remove('hide');
+    
+    var cityTemp = document.createElement('p');
+    cityTemp.classList = 'pl-3 mt-3 weather-info';
+    cityTemp.textContent = `Current Temperature: ${forecast.current['temp']}`;
+    currentWeatherEl.appendChild(cityTemp);
 
-// }
+    var cityHumidity = document.createElement('p');
+    cityHumidity.classList = 'pl-3 weather-info';
+    cityHumidity.textContent = `Humidity: ${forecast.current['humidity']}%`;
+    currentWeatherEl.appendChild(cityHumidity);
+
+    var cityWind = document.createElement('p');
+    cityWind.classList = 'pl-3 weather-info';
+    cityWind.textContent = `Wind Speed: ${forecast.current['wind_speed']} MPH`;
+    currentWeatherEl.appendChild(cityWind);
+
+    var cityUv = document.createElement('p');
+    cityUv.classList = 'pl-3 weather-info';
+    cityUv.textContent = `UV Index: ${forecast.current['uvi']}`;
+    currentWeatherEl.appendChild(cityUv);
+
+}
 
 cityBtn.addEventListener("click", formHandler)
