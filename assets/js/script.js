@@ -1,6 +1,6 @@
 var cityInput = document.querySelector('#city-input');
 var cityBtn = document.querySelector('#search-btn');
-var cityNameEl = document.querySelector('.city-name');
+var cityNameEl = document.querySelector('#city-name');
 var cityArr = [];
 
 var formHandler = function(event) {
@@ -61,6 +61,8 @@ var getCityForecast = function(city, lon, lat) {
                 // identifies city name in forecast
                 cityNameEl.textContent = `${city} (${moment().format("M/D/YYYY")})`; 
 
+                console.log(data)
+
                 currentForecast(data);
                 fiveDayForecast(data);
             });
@@ -73,15 +75,29 @@ var currentForecast = function(forecast) {
     
     var forecastEl = document.querySelector('.city-forecast');
     forecastEl.classList.remove('hide');
+
+    var weatherIconImg = document.querySelector('#today-icon');
+    var currentIcon = forecast.current.weather[0].icon;
+    weatherIconImg.setAttribute('src', `http://openweathermap.org/img/wn/${currentIcon}.png`);
+    weatherIconImg.setAttribute('alt', forecast.current.weather[0].main)
     
     var currentTemp = Math.round(forecast.current['temp']);
     document.querySelector('#current-temp').textContent = currentTemp;
+
+    var currentFeelsLike = Math.round(forecast.current['feels_like']);
+    document.querySelector('#current-feels-like').textContent = currentFeelsLike;
 
     var currentHigh = Math.round(forecast.daily[0].temp.max);
     document.querySelector('#current-high').textContent = currentHigh;
 
     var currentLow = Math.round(forecast.daily[0].temp.min);
     document.querySelector('#current-low').textContent = currentLow;
+
+    var currentCondition = forecast.current.weather[0].description
+        .split(' ')
+        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+        .join(' ');
+    document.querySelector('#current-condition').textContent = currentCondition;
 
     var currentHumidity = forecast.current['humidity'];
     document.querySelector('#current-humidity').textContent = currentHumidity;
@@ -113,17 +129,22 @@ var fiveDayForecast = function(forecast) {
         var dateP = document.querySelector('#date-' + i);
         dateP.textContent = moment().add(i, 'days').format('M/D/YYYY');
 
-        var tempP = document.querySelector('#temp-' + i);
-        tempP.textContent = `Temperature: ${Math.round(forecast.daily[i].temp.day)} °F`; 
+        var iconImg = document.querySelector('#icon-' + i);
+        var iconCode = forecast.daily[i].weather[0].icon
+        iconImg.setAttribute('src', `http://openweathermap.org/img/wn/${iconCode}.png`)
+        iconImg.setAttribute('alt', forecast.daily[i].weather[0].main)
 
-        var highP = document.querySelector('#high-' + i);
-        highP.textContent = `High: ${Math.round(forecast.daily[i].temp.max)} °F`;
+        var tempSpan = document.querySelector('#temp-' + i);
+        tempSpan.innerHTML = `${Math.round(forecast.daily[i].temp.day)} &deg;F`; 
 
-        var lowP = document.querySelector('#low-' + i);
-        lowP.textContent = `Low: ${Math.round(forecast.daily[i].temp.min)} °F`;
+        var highSpan = document.querySelector('#high-' + i);
+        highSpan.textContent = Math.round(forecast.daily[i].temp.max);
 
-        var humidityP = document.querySelector('#humidity-' + i);
-        humidityP.textContent = `Humidity: ${forecast.daily[i].humidity}%`;
+        var lowSpan = document.querySelector('#low-' + i);
+        lowSpan.textContent = Math.round(forecast.daily[i].temp.min);
+
+        var humiditySpan = document.querySelector('#humidity-' + i);
+        humiditySpan.textContent = forecast.daily[i].humidity;
     }
 }
 
@@ -172,6 +193,7 @@ var loadCities = function() {
 
 var selectRecent = function(event) {
     var clickedCity = event.target.getAttribute('value');
+
     getCoords(clickedCity);
 }
 
