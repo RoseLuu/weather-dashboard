@@ -10,6 +10,7 @@ A simple weather application that will display current weather information as we
 5. [Contribution](#contributions)
 
 ## Features
+* **PLEASE NOTE:** The API key is not included in the script.  As a result, the deployed application will not function as intended.  Please contact Mila Decker for the API key.
 * Users can look up current and five-day forecasts by searching for a city.
 * UV index will display with a green, yellow, red, or purple badge dependant on severity.
 * Up to five of the most recent search results are saved.
@@ -29,7 +30,8 @@ A simple weather application that will display current weather information as we
 [Deployed Weather Dashboard](https://deckiedevs.github.io/weather-dashboard)
 
 ## Task List
-- [ ] Refactor
+- [ ] Learn how to mask API keys.
+- [x] Refactor.
 - [x] Submit form on `ENTER` key.
 - [ ] Add feature: search by zip code.
 - [ ] Add feature: search by city and state. 
