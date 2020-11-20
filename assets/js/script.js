@@ -2,10 +2,9 @@ var cityInput = document.querySelector('#city-input');
 var cityBtn = document.querySelector('#search-btn');
 var cityNameEl = document.querySelector('#city-name');
 var cityArr = [];
+var apiKey = ''; // please enter API Key here
 
 var formHandler = function(event) {
-    event.preventDefault();
-
     // formats city name
     var selectedCity = cityInput
         .value
@@ -25,7 +24,7 @@ var formHandler = function(event) {
 
 // uses 'current weather api' to fetch latitude and longitude
 var getCoords = function(city) {
-    var currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=3655ed2750f651629b08c7f61f4fd95c`;
+    var currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
 
     fetch(currentWeatherApi).then(function(response) {
         if (response.ok) {
@@ -53,7 +52,7 @@ var getCoords = function(city) {
 
 // uses latitude and longitude to fetch current weather and five-day forecast
 var getCityForecast = function(city, lon, lat) {
-    var oneCallApi = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly,alerts&appid=0231b088137927c3d579de4869b3ea5f`;
+    var oneCallApi = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly,alerts&appid=${apiKey}`;
     fetch(oneCallApi).then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
@@ -110,15 +109,19 @@ var currentForecast = function(forecast) {
     uviSpan.textContent = currentUvi;
 
     // styles UV index
-    if (currentUvi <= 2) {
-        uviSpan.className = 'badge badge-success';
-    } else if (currentUvi <= 5) {
-        uviSpan.className ='badge badge-warning';
-    } else if (currentUvi <= 7) {
-        uviSpan.className = 'badge badge-danger';
-    } else {
-        uviSpan.className = 'badge text-light';
-        uviSpan.setAttribute('style', 'background-color: #553C7B');
+    switch (true) {
+        case (currentUvi <= 2):
+            uviSpan.className = 'badge badge-success';
+            break;
+        case (currentUvi <= 5):
+            uviSpan.className = 'badge badge-warning';
+            break;
+        case (currentUvi <=7):
+            uviSpan.className = 'badge badge-danger';
+            break;
+        default:
+            uviSpan.className = 'badge text-light';
+            uviSpan.setAttribute('style', 'background-color: #553C7B');
     }
 }
 
@@ -170,6 +173,7 @@ var loadCities = function() {
         cityArr = [];
         return false;
     } else if (cityArr.length > 5) {
+        // saves only the five most recent cities
         cityArr.shift();
     }
 
@@ -200,10 +204,8 @@ var selectRecent = function(event) {
 loadCities();
 cityBtn.addEventListener('click', formHandler)
 
-// NOT WORKING
-// cityInput.addEventListener('keyup', function(event) {
-//     if (event.keyCode === 13) {
-//         event.preventDefault();
-//         cityBtn.click();
-//     }
-// });
+cityInput.addEventListener('keyup', function(event) {
+    if (event.keyCode === 13) {
+        cityBtn.click();
+    }
+});

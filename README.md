@@ -30,7 +30,7 @@ A simple weather application that will display current weather information as we
 
 ## Task List
 - [ ] Refactor
-- [ ] Submit form on `ENTER` key.
+- [x] Submit form on `ENTER` key.
 - [ ] Add feature: search by zip code.
 - [ ] Add feature: search by city and state. 
 
