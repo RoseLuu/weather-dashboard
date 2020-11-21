@@ -75,53 +75,53 @@ var currentForecast = function(forecast) {
     var forecastEl = document.querySelector('.city-forecast');
     forecastEl.classList.remove('hide');
 
-    var weatherIconImg = document.querySelector('#today-icon');
+    var weatherIconEl = document.querySelector('#today-icon');
     var currentIcon = forecast.current.weather[0].icon;
-    weatherIconImg.setAttribute('src', `http://openweathermap.org/img/wn/${currentIcon}.png`);
-    weatherIconImg.setAttribute('alt', forecast.current.weather[0].main)
+    weatherIconEl.setAttribute('src', `http://openweathermap.org/img/wn/${currentIcon}.png`);
+    weatherIconEl.setAttribute('alt', forecast.current.weather[0].main)
     
-    var currentTemp = Math.round(forecast.current['temp']);
-    document.querySelector('#current-temp').textContent = currentTemp;
+    var currentTempEl = document.querySelector('#current-temp');
+    currentTempEl.textContent = Math.round(forecast.current['temp']);
 
-    var currentFeelsLike = Math.round(forecast.current['feels_like']);
-    document.querySelector('#current-feels-like').textContent = currentFeelsLike;
+    var currentFeelsLikeEl = document.querySelector('#current-feels-like');
+    currentFeelsLikeEl.textContent = Math.round(forecast.current['feels_like']);
 
-    var currentHigh = Math.round(forecast.daily[0].temp.max);
-    document.querySelector('#current-high').textContent = currentHigh;
+    var currentHighEl = document.querySelector('#current-high');
+    currentHighEl.textContent = Math.round(forecast.daily[0].temp.max);
 
-    var currentLow = Math.round(forecast.daily[0].temp.min);
-    document.querySelector('#current-low').textContent = currentLow;
+    var currentLowEl = document.querySelector('#current-low')
+    currentLowEl.textContent = Math.round(forecast.daily[0].temp.min);
 
-    var currentCondition = forecast.current.weather[0].description
+    var currentConditionEl = document.querySelector('#current-condition');
+    currentConditionEl.textContent = forecast.current.weather[0].description
         .split(' ')
         .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
         .join(' ');
-    document.querySelector('#current-condition').textContent = currentCondition;
 
-    var currentHumidity = forecast.current['humidity'];
-    document.querySelector('#current-humidity').textContent = currentHumidity;
+    var currentHumidityEl = document.querySelector('#current-humidity');
+    currentHumidityEl.textContent = forecast.current['humidity'];
 
-    var currentWind = forecast.current['wind_speed'];
-    document.querySelector('#current-wind-speed').textContent = currentWind;
+    var currentWindEl = document.querySelector('#current-wind-speed')
+    currentWindEl.textContent = forecast.current['wind_speed'];
 
-    var uviSpan = document.querySelector('#current-uvi')
+    var uviEl = document.querySelector('#current-uvi')
     var currentUvi = forecast.current['uvi'];
-    uviSpan.textContent = currentUvi;
+    uviEl.textContent = currentUvi;
 
     // styles UV index
     switch (true) {
         case (currentUvi <= 2):
-            uviSpan.className = 'badge badge-success';
+            uviEl.className = 'badge badge-success';
             break;
         case (currentUvi <= 5):
-            uviSpan.className = 'badge badge-warning';
+            uviEl.className = 'badge badge-warning';
             break;
         case (currentUvi <=7):
-            uviSpan.className = 'badge badge-danger';
+            uviEl.className = 'badge badge-danger';
             break;
         default:
-            uviSpan.className = 'badge text-light';
-            uviSpan.setAttribute('style', 'background-color: #553C7B');
+            uviEl.className = 'badge text-light';
+            uviEl.setAttribute('style', 'background-color: #553C7B');
     }
 }
 
