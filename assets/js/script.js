@@ -69,6 +69,13 @@ var getCityForecast = function(city, lon, lat) {
     })
 }
 
+// helper function to select HTML element and display rounded temperature
+var displayTemp = function(element, temperature) {
+    var tempEl = document.querySelector(element);
+    var elementText = Math.round(temperature);
+    tempEl.textContent = elementText;
+}
+
 // displays current forecast
 var currentForecast = function(forecast) {
     
@@ -79,18 +86,11 @@ var currentForecast = function(forecast) {
     var currentIcon = forecast.current.weather[0].icon;
     weatherIconEl.setAttribute('src', `http://openweathermap.org/img/wn/${currentIcon}.png`);
     weatherIconEl.setAttribute('alt', forecast.current.weather[0].main)
-    
-    var currentTempEl = document.querySelector('#current-temp');
-    currentTempEl.textContent = Math.round(forecast.current['temp']);
 
-    var currentFeelsLikeEl = document.querySelector('#current-feels-like');
-    currentFeelsLikeEl.textContent = Math.round(forecast.current['feels_like']);
-
-    var currentHighEl = document.querySelector('#current-high');
-    currentHighEl.textContent = Math.round(forecast.daily[0].temp.max);
-
-    var currentLowEl = document.querySelector('#current-low')
-    currentLowEl.textContent = Math.round(forecast.daily[0].temp.min);
+    displayTemp('#current-temp', forecast.current['temp']);
+    displayTemp('#current-feels-like', forecast.current['feels_like']);
+    displayTemp('#current-high', forecast.daily[0].temp.max);
+    displayTemp('#current-low', forecast.daily[0].temp.min);
 
     var currentConditionEl = document.querySelector('#current-condition');
     currentConditionEl.textContent = forecast.current.weather[0].description
@@ -133,18 +133,13 @@ var fiveDayForecast = function(forecast) {
         dateP.textContent = moment().add(i, 'days').format('M/D/YYYY');
 
         var iconImg = document.querySelector('#icon-' + i);
-        var iconCode = forecast.daily[i].weather[0].icon
-        iconImg.setAttribute('src', `http://openweathermap.org/img/wn/${iconCode}.png`)
-        iconImg.setAttribute('alt', forecast.daily[i].weather[0].main)
+        var iconCode = forecast.daily[i].weather[0].icon;
+        iconImg.setAttribute('src', `http://openweathermap.org/img/wn/${iconCode}.png`);
+        iconImg.setAttribute('alt', forecast.daily[i].weather[0].main);
 
-        var tempSpan = document.querySelector('#temp-' + i);
-        tempSpan.innerHTML = `${Math.round(forecast.daily[i].temp.day)} &deg;F`; 
-
-        var highSpan = document.querySelector('#high-' + i);
-        highSpan.textContent = Math.round(forecast.daily[i].temp.max);
-
-        var lowSpan = document.querySelector('#low-' + i);
-        lowSpan.textContent = Math.round(forecast.daily[i].temp.min);
+        displayTemp('#temp-' + i, forecast.daily[i].temp.day);
+        displayTemp('#high-' + i, forecast.daily[i].temp.max);
+        displayTemp('#low-' + i, forecast.daily[i].temp.min);
 
         var humiditySpan = document.querySelector('#humidity-' + i);
         humiditySpan.textContent = forecast.daily[i].humidity;
@@ -204,6 +199,7 @@ var selectRecent = function(event) {
 loadCities();
 cityBtn.addEventListener('click', formHandler)
 
+// searches for city on ENTER key
 cityInput.addEventListener('keyup', function(event) {
     if (event.keyCode === 13) {
         cityBtn.click();
